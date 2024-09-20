@@ -1,0 +1,15 @@
+target
+*.class
+
+*.iml
+*.ipr
+*.iws
+.idea
+out
+
+local.sbt
+.metals/
+.bloop/
+metals.sbt
+.bsp/
+*.scala.semanticdb
