@@ -14,15 +14,9 @@ class NearbyCitiesService(readerService: CityReaderService, repository: CityRepo
       case Right(cities) => repository.loadCities(cities)
   }
 
-  def findFiveNearbyCitesForEachCity(): Unit = {
+  def findFiveNearbyCitesForEachCity(): Map[City, Seq[City]] = {
     val allCities = repository.getAllCities
-    allCities.zipWithIndex.foreach((sourceCity, idx) => {
-      val neighborsPrinted = repository
-        .findNearestCities(sourceCity)
-        .map(city => s"${city.name}, ${city.stateCode}")
-        .mkString(", ")
-      println(s"$idx. Neighbors of ${sourceCity.name}, ${sourceCity.stateCode}: $neighborsPrinted")
-    })
+    allCities.map(sourceCity => (sourceCity, repository.findNearestCities(sourceCity))).toMap
   }
 
 }

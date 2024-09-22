@@ -1,6 +1,5 @@
 package domain
 
-import domain.City.ValidationError
 import squants.space.{Angle, Degrees}
 
 case class Coordinate(latitude: Angle, longitude: Angle)

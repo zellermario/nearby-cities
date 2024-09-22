@@ -1,7 +1,5 @@
 package domain
 
-import squants.space.{Angle, Degrees}
-
 case class City(name: String, stateCode: String, coordinate: Coordinate)
 
 object City {
