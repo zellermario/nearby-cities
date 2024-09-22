@@ -6,3 +6,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "nearby-cities"
   )
+
+libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "2.0.0"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
+libraryDependencies += "org.typelevel" %% "squants" % "1.8.3"
