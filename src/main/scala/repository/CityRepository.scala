@@ -8,7 +8,7 @@ trait CityRepository {
   
   def getAllCities: Seq[City]
 
-  def findCityByName(name: String): Option[City]
+  def findCity(name: String, stateCode: String): Option[City]
 
   def findNearestCities(sourceCity: City, numberOfCities: Int = 5): Seq[City]
 

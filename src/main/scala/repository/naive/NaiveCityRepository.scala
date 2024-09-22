@@ -1,25 +1,24 @@
 package repository.naive
 
-import domain.City
+import domain.{City, UsaStates}
 import domain.SphericalGeometry.greatCircleDistance
 import repository.CityRepository
-import squants.space.Length
 
 class NaiveCityRepository extends CityRepository {
 
-  private var citiesByName: Map[String, City] = Map.empty
+  private var cities: Seq[City] = Seq.empty
 
-  override def loadCities(cities: Seq[City]): Unit = {
-    citiesByName = cities.foldLeft(Map.empty)((map, city) => map + (city.name -> city))
-  }
+  override def loadCities(cities: Seq[City]): Unit = this.cities = cities
 
-  override def getAllCities: Seq[City] = citiesByName.values.toSeq
+  override def getAllCities: Seq[City] = cities
 
-  override def findCityByName(name: String): Option[City] = citiesByName.get(name)
-  
+  override def findCity(name: String, stateCode: String): Option[City] =
+    cities.find(c => c.name == name && c.stateCode == stateCode)
+
   override def findNearestCities(sourceCity: City, numberOfCities: Int = 5): Seq[City] = {
-    val cities = citiesByName.values.toSeq
+    val nearbyStates = UsaStates.adjacentStates.getOrElse(sourceCity.stateCode, Seq(sourceCity.stateCode))
     cities
+      .filter(targetCity => sourceCity != targetCity && nearbyStates.contains(targetCity.stateCode))
       .map(targetCity => (targetCity, greatCircleDistance(sourceCity.coordinate, targetCity.coordinate)))
       .sortBy((_, distance) => distance.value)
       .take(numberOfCities)
