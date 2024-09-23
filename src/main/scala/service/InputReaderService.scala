@@ -6,7 +6,7 @@ import domain.City
 import scala.io.Source
 import scala.util.Using
 
-class CityReaderService {
+class InputReaderService {
 
   private object Columns {
     val name = "city"
@@ -15,8 +15,8 @@ class CityReaderService {
     val lonDegrees = "lng"
   }
 
-  def parseCitiesFromFile(csvFileSource: Source): Either[Seq[String], Seq[City]] =
-    Using.resource(CSVReader.open(csvFileSource)) { csvReader =>
+  def parseCitiesFromCsv(inputFile: Source): Either[Seq[String], Seq[City]] =
+    Using.resource(CSVReader.open(inputFile)) { csvReader =>
       val results = csvReader.allWithHeaders()
         .zipWithIndex
         .map((row, idx) =>

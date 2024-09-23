@@ -1,7 +1,7 @@
 import repository.indexed.IndexedCityRepository
-import repository.naive.NaiveCityRepository
-import service.{CityReaderService, NearbyCitiesService}
+import service.{InputReaderService, NearbyCitiesService, OutputWriterService}
 
+import java.io.{File, PrintWriter}
 import scala.io.Source
 
 object Application {
@@ -9,18 +9,22 @@ object Application {
   @main
   def main(): Unit = {
     val cityRepository = IndexedCityRepository()
-    val cityParser = CityReaderService()
-    val nearbyCitiesService = new NearbyCitiesService(cityParser, cityRepository)
+    val inputReader = InputReaderService()
+    val outputWriter = OutputWriterService()
+    val nearbyCitiesService = NearbyCitiesService(cityRepository)
 
-    val csvFileSource = Source.fromResource("cities.csv")
-    nearbyCitiesService.loadCitiesFromCsvFile(csvFileSource)
-    val startedAt = System.currentTimeMillis()
-    val result = nearbyCitiesService.findFiveNearbyCitesForEachCity()
-    val finishedAt = System.currentTimeMillis()
-    val elapsedSeconds = (finishedAt - startedAt) / 1000
-    println(s"Finished in $elapsedSeconds seconds.")
-    println(result)
-    println(s"Finished in $elapsedSeconds seconds.")
+    val inputFile = Source.fromResource("cities.csv")
+    val maybeCities = inputReader.parseCitiesFromCsv(inputFile)
+
+    maybeCities match
+      case Left(errors) =>
+        errors.foreach(System.err.println)
+        System.exit(0)
+      case Right(cities) =>
+        nearbyCitiesService.loadCities(cities)
+        val results = nearbyCitiesService.findNearbyCitesForEachCity(cities, numberOfResults = 5)
+        val outputFile = new PrintWriter(new File("neighbors.csv"))
+        outputWriter.writeResultsToCsv(results, outputFile)
   }
 
 }
