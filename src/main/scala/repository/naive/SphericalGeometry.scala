@@ -1,5 +1,6 @@
-package domain
+package repository.naive
 
+import domain.Coordinate
 import squants.space.{Kilometers, Length}
 
 object SphericalGeometry {

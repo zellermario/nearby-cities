@@ -1,6 +1,7 @@
-package domain
+package repository.naive
 
-import domain.SphericalGeometry.greatCircleDistance
+import domain.{City, Coordinate}
+import repository.naive.SphericalGeometry.greatCircleDistance
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.should
 import squants.Percent

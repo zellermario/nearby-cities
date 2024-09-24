@@ -1,7 +1,7 @@
 package repository.naive
 
-import domain.{City, UsaStates}
-import domain.SphericalGeometry.greatCircleDistance
+import domain.City
+import SphericalGeometry.greatCircleDistance
 import repository.CityRepository
 
 class NaiveCityRepository extends CityRepository {

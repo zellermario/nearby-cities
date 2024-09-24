@@ -1,4 +1,4 @@
-package domain
+package repository.naive
 
 object UsaStates {
 

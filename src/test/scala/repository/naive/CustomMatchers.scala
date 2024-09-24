@@ -1,4 +1,4 @@
-package domain
+package repository.naive
 
 import org.scalatest.matchers.{MatchResult, Matcher}
 import squants.{Dimensionless, Percent, Quantity}

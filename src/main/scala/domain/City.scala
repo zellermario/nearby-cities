@@ -1,5 +1,7 @@
 package domain
 
+import repository.naive.UsaStates
+
 case class City(name: String, stateCode: String, coordinate: Coordinate)
 
 object City {
