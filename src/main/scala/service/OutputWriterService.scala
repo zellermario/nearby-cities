@@ -1,20 +1,25 @@
 package service
 
+import cats.effect.{IO, Resource}
 import com.github.tototoshi.csv.CSVWriter
 import domain.City
 
 import java.io.Writer
-import scala.util.Using
 
 class OutputWriterService {
-
-  def writeResultsToCsv(results: Map[City, Seq[City]], writer: Writer): Either[String, Unit] = {
-    Using.resource(CSVWriter.open(writer)) { csvWriter =>
+  
+  def writeResultsToCsv(nearbyCityMap: Map[City, Seq[City]], writer: Writer): IO[Unit] = {
+    makeCSVWriterResource(writer).use(csvWriter => {
       val format = (city: City) => s"${city.name}, ${city.stateCode}"
-      val rows = results.toList
-        .map((city, neighbors) => (city +: neighbors).map(format))
-      Right(csvWriter.writeAll(rows))
-    }
+      val rows = nearbyCityMap.toList.map((city, neighbors) => (city +: neighbors).map(format))
+      IO(csvWriter.writeAll(rows))
+    })
+  }
+
+  private def makeCSVWriterResource(writer: Writer) = {
+    val open = IO(CSVWriter.open(writer))
+    val close = (writer: CSVWriter) => IO(writer.close())
+    Resource.make(open)(close)
   }
 
 }
